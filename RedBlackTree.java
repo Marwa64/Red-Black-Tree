@@ -15,18 +15,28 @@ class Node<T>{
 public class RedBlackTree<T> {
     Node<T> root;
 
-
+    public void rotateRight() {
+    	
+    }
+    public void rotateLeft() {
+    	
+    }
     public void insert() {
     	
     }
+    public void search() {
+    	
+    }
     public void delete(Node<T> node) {
-    	// Case 1
+    	// If this is a leaf
     	if (node.right == null && node.left == null) {
+    		// Case 1
     		if (node.clr != node.parent.clr) {
-    			if (node.parent.clr == color.RED) {
-    				node.parent.clr = color.BLACK;
-    			}
+    			node.parent.clr = color.BLACK;
     			node = null;
+    		} else {
+    			// Case 2
+    			
     		}
     	}
     	// Case 2
@@ -45,12 +55,10 @@ public class RedBlackTree<T> {
     public void clear() {
     	
     }
-    public void print() {
+    public void printInorder() {
     	
     }
-    public void fixViolation() {
-    	
-    }
+
     public static void main(String[] args) {
     	
     }

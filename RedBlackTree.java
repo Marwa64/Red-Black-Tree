@@ -1,3 +1,4 @@
+import javax.swing.plaf.IconUIResource;
 import java.awt.*;
 
 enum color{RED,BLACK};
@@ -142,8 +143,17 @@ public class RedBlackTree<T extends Comparable<T>> {
     public void clear() {
     	
     }
-    public void printInorder() {
-    	
+    public void printInorder (Node<T> root) {
+        if(root == null)return;
+
+        printInorder(root.left);
+        System.out.println(root.data + " ");
+        printInorder(root.right);
+
+    }
+
+    public void print(){
+        printInorder(root);
     }
 
     public static void main(String[] args) {

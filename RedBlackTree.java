@@ -49,6 +49,7 @@ public class RedBlackTree<T extends Comparable<T>> {
                 current=current.right;
             }
         }
+
         node.parent=temp;
 
         if(temp.data.compareTo(node.data)<0)
@@ -66,7 +67,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             if(node.parent == nGrandParent.left){
                 nUncle= nGrandParent.right;
 
-                if(nUncle.clr == color.RED){
+                if(nUncle !=null && nUncle.clr == color.RED){
                     node.parent.clr = color.BLACK;
                     nUncle.clr= color.BLACK;
                     nGrandParent.clr = color.RED;
@@ -88,7 +89,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             else {
                 nUncle= nGrandParent.left;
 
-                if(nUncle.clr == color.RED){
+                if(nUncle !=null && nUncle.clr == color.RED){
                     node.parent.clr = color.BLACK;
                     nUncle.clr= color.BLACK;
                     nGrandParent.clr = color.RED;
@@ -207,13 +208,8 @@ public class RedBlackTree<T extends Comparable<T>> {
 
     public static void main(String[] args) {
     	RedBlackTree<Integer> x = new RedBlackTree<Integer>();
-    	x.insert(3);
-        x.insert(7);
-        x.insert(18);
-        x.insert(10);
-        x.insert(22);
-        x.insert(8);
-        x.insert(11);
+    	x.insert(10);
+        x.insert(2);
         x.insert(26);
         x.print();
 

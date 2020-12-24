@@ -49,6 +49,7 @@ public class RedBlackTree<T extends Comparable<T>> {
                 current=current.right;
             }
         }
+
         node.parent=temp;
 
         if(temp.data.compareTo(node.data)<0)
@@ -66,7 +67,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             if(node.parent == nGrandParent.left){
                 nUncle= nGrandParent.right;
 
-                if(nUncle.clr == color.RED){
+                if(nUncle !=null && nUncle.clr == color.RED){
                     node.parent.clr = color.BLACK;
                     nUncle.clr= color.BLACK;
                     nGrandParent.clr = color.RED;
@@ -88,7 +89,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             else {
                 nUncle= nGrandParent.left;
 
-                if(nUncle.clr == color.RED){
+                if(nUncle !=null && nUncle.clr == color.RED){
                     node.parent.clr = color.BLACK;
                     nUncle.clr= color.BLACK;
                     nGrandParent.clr = color.RED;
@@ -130,12 +131,16 @@ public class RedBlackTree<T extends Comparable<T>> {
     
     public void delete(T data) {
     	Node<T> current = search(data);
+    	System.out.println(current.right.data);
+    	
     	if (current != null) {
     		// If this is a leaf
         	if (current.right == null && current.left == null && current != root) {
         		// Case 1
+        		System.out.println("hi1");
         		if (current.clr != current.parent.clr) {
         			current.parent.clr = color.BLACK;
+        			System.out.println("hi");
         			if (current == current.parent.left) {
         				current.parent.left = null;
         			} else {
@@ -204,7 +209,7 @@ public class RedBlackTree<T extends Comparable<T>> {
         printInorder(root.left);
         System.out.println(root.data + " " + root.clr + " -");
         printInorder(root.right);
-        System.out.println();
+        //System.out.println();
     }
 
     public void print(){
@@ -214,11 +219,15 @@ public class RedBlackTree<T extends Comparable<T>> {
     public static void main(String[] args) {
     	RedBlackTree<Integer> x = new RedBlackTree<Integer>();
     	x.insert(10);
-        x.insert(16);
+    	x.insert(2);
+    	x.insert(16);
+    	System.out.println("root: " + x.root.data);
+    	System.out.println("left: " + x.root.left.data);
+    	System.out.println("left right: " + x.root.left.right.data);
         x.print();
-        x.delete(16);
-        x.print();
-
+        /*System.out.println();
+        x.delete(2);
+        x.print();*/
     }
 
 }

@@ -18,16 +18,30 @@ class Node<T extends  Comparable<T> >{
 public class RedBlackTree<T extends Comparable<T>> {
     Node<T> root;
 
+
+    RedBlackTree(){
+        root=null;
+    }
+
     public void rotateRight(Node<T> node) {
     	
     }
     public void rotateLeft(Node<T> node) {
     	
     }
-    public void insert(Node<T> node) {
+    public void insert(T data) {
+        if(root == null){
+            root=new Node<>(data);
+            root.clr=color.BLACK;
+            return;
+        }
+
+        Node<T> node = new Node<>(data);
         Node<T> current=this.root;
+        Node<T> temp = null;
 
         while (current!=null) {
+            temp=current;
             if (current.data.compareTo(node.data) < 0) {
                 current=current.left;
             }
@@ -35,11 +49,11 @@ public class RedBlackTree<T extends Comparable<T>> {
                 current=current.right;
             }
         }
-        node.parent=current;
+        node.parent=temp;
 
-        if(current.data.compareTo(node.data)<0)
-            current.right=node;
-        else current.left=node;
+        if(temp.data.compareTo(node.data)<0)
+            temp.right=node;
+        else temp.left=node;
 
         node.left=node.right=null;
         node.clr=color.RED;
@@ -53,7 +67,6 @@ public class RedBlackTree<T extends Comparable<T>> {
                 nUncle= nGrandParent.right;
 
                 if(nUncle.clr == color.RED){
-                    //recoloring
                     node.parent.clr = color.BLACK;
                     nUncle.clr= color.BLACK;
                     nGrandParent.clr = color.RED;
@@ -183,7 +196,7 @@ public class RedBlackTree<T extends Comparable<T>> {
         if(root == null)return;
 
         printInorder(root.left);
-        System.out.println(root.data + " ");
+        System.out.println(root.data + " " + root.clr + " -");
         printInorder(root.right);
 
     }
@@ -194,15 +207,16 @@ public class RedBlackTree<T extends Comparable<T>> {
 
     public static void main(String[] args) {
     	RedBlackTree<Integer> x = new RedBlackTree<Integer>();
-    	x.root = new Node<Integer>(12);
-    	x.root.clr = color.BLACK;
-    	x.root.right = new Node<Integer>(15);
-    	x.root.right.parent = x.root;
-    	x.root.left = new Node<Integer>(10);
-    	x.root.left.parent = x.root;
-    	x.print();
-    	x.delete(10);
-    	x.print();
+    	x.insert(3);
+        x.insert(7);
+        x.insert(18);
+        x.insert(10);
+        x.insert(22);
+        x.insert(8);
+        x.insert(11);
+        x.insert(26);
+        x.print();
+
     }
 
 }

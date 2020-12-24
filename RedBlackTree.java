@@ -43,10 +43,10 @@ public class RedBlackTree<T extends Comparable<T>> {
         while (current!=null) {
             temp=current;
             if (current.data.compareTo(node.data) < 0) {
-                current=current.left;
+                current=current.right;
             }
             else {
-                current=current.right;
+                current=current.left;
             }
         }
 
@@ -193,24 +193,25 @@ public class RedBlackTree<T extends Comparable<T>> {
     public void clear() {
     	
     }
-    public void printInorder (Node<T> root) {
+    public void printInorder (Node<T> root, String path) {
         if(root == null)return;
 
-        printInorder(root.left);
-        System.out.println(root.data + " " + root.clr + " -");
-        printInorder(root.right);
+
+        printInorder(root.left,path+"left ");
+        System.out.println(root.data + " " + root.clr +" - " + path+ " -");
+        printInorder(root.right , path+"right ");
 
     }
 
     public void print(){
-        printInorder(root);
+        printInorder(root,"root ");
     }
 
     public static void main(String[] args) {
     	RedBlackTree<Integer> x = new RedBlackTree<Integer>();
     	x.insert(10);
         x.insert(2);
-        x.insert(26);
+        x.insert(16);
         x.print();
 
     }

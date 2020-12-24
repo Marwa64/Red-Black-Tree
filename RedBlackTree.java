@@ -103,7 +103,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     public Node<T> search(T data) {
     	Node<T> current = root;
     	while (current != null) {
-    		System.out.print("compare " + current.data + " to " + data + "\n");
+    		//System.out.print("compare " + current.data + " to " + data + "\n");
     		if (current.data == data) {
     			return current;
     		} else if (current.data.compareTo(data) > 0) {
@@ -117,12 +117,17 @@ public class RedBlackTree<T extends Comparable<T>> {
     
     public void delete(T data) {
     	Node<T> current = search(data);
-    	// If this is a leaf
     	if (current != null) {
+    		// If this is a leaf
         	if (current.right == null && current.left == null && current != root) {
         		// Case 1
         		if (current.clr != current.parent.clr) {
         			current.parent.clr = color.BLACK;
+        			if (current == current.parent.left) {
+        				current.parent.left = null;
+        			} else {
+        				current.parent.right = null;
+        			}
         		} else {
         			// Case 3
         			if (current.clr == color.BLACK && current.parent.clr == color.BLACK) {
@@ -141,6 +146,7 @@ public class RedBlackTree<T extends Comparable<T>> {
         					} else {
         						rotateLeft(current.parent);
         					}
+        					current.parent.left = null;
         				} 
         				// If this node is the right child
         				else {
@@ -157,10 +163,10 @@ public class RedBlackTree<T extends Comparable<T>> {
         					} else {
         						rotateRight(current.parent);
         					}
+        					current.parent.right = null;
         				}
         			}
         		}
-        		current = null;
         	}
         	// Case 2
         	/*else if (node.right != null && node.left == null) {
@@ -201,6 +207,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     	x.root.left = new Node<Integer>(10);
     	x.root.left.parent = x.root;
     	x.print();
+    	System.out.println();
     	x.delete(10);
     	x.print();
     }

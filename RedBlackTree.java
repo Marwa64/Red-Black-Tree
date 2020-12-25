@@ -135,7 +135,7 @@ public class RedBlackTree<T extends Comparable<T>> {
                 }
                 else if(node == node.parent.right){
                     node=node.parent;
-                    rotateRight(node);
+                    rotateLeft(node);
                 }
                 else {
                     node.parent.clr = color.BLACK;
@@ -174,12 +174,12 @@ public class RedBlackTree<T extends Comparable<T>> {
     		}
     	}
     }
-    public void fixDelete() {
+    public void fixDelete(Node<T> node) {
     	
     }
     public void delete(T data) {
     	Node<T> current = search(data);
-    	
+    	Node<T> sibling = null;
     	if (current != null) {
     		// If this is a leaf
         	if (current.right == null && current.left == null && current != root) {
@@ -192,13 +192,21 @@ public class RedBlackTree<T extends Comparable<T>> {
         				// If this node is the left child
         				if (current == current.parent.left) {
         					// If the sibling is black
+        					sibling = current.parent.right;
         					if (current.parent.right.clr == color.BLACK) {
         						// If the sibling's right child is red (Case 3.2 a iii)
-        						if (current.parent.right.right.clr == color.RED) {
-        							rotateLeft(current.parent);
+        						if (current.parent.right.right != null) {
+        							if (current.parent.right.right.clr == color.RED) {
+        								rotateLeft(current.parent);
+        							}
         						// If the sibling's left child is red (Case 3.2 a iv)
-        						} else if (current.parent.right.left.clr == color.RED) {
-        							rotateRight(current.parent.right);
+        						} else if (current.parent.right.left != null) {
+        							if (current.parent.right.left.clr == color.RED) {
+        								rotateRight(current.parent.right);
+        							}
+        						// If the sibling's children and black or null (Case 3.2 b)
+        						} else {
+        							current.parent.right.clr = color.RED;
         						}
         					// If the sibling is red (Case 3.2 c iii)
         					} else {
@@ -215,6 +223,9 @@ public class RedBlackTree<T extends Comparable<T>> {
         						// If the sibling's left child is red (Case 3.2 a i)
         						} else if (current.parent.left.left.clr == color.RED) {
         							rotateRight(current.parent);
+        						// If the sibling's children and black or null (Case 3.2 b)
+        						} else {
+        							current.parent.left.clr = color.RED;
         						}
         					// If the sibling is red (Case 3.2 c i)
         					} else {
@@ -241,25 +252,32 @@ public class RedBlackTree<T extends Comparable<T>> {
         		}
         		deleteNode(temp);
         	} else if (current.right != null) {
-        		boolean black = false;
-        		if (current == current.parent.left) {
-            		if (current.parent.left.clr != current.right.clr) {
-            			black = true;
+        		if (current != root) {
+               		boolean black = false;
+            		if (current == current.parent.left) {
+                		if (current.clr != current.right.clr) {
+                			black = true;
+                		}
+            			current.parent.left = current.right;
+            			current.right.parent = current.parent;
+            			if (black) {
+            				current.parent.left.clr = color.BLACK;
+            			}
+            		} else {
+                		if (current.parent.right.clr != current.right.clr) {
+                			black = true;
+                		}
+            			current.parent.right = current.right;
+            			current.right.parent = current.parent;
+            			if (black) {
+            				current.parent.right.clr = color.BLACK;
+            			}
             		}
-        			current.parent.left = current.right;
-        			current.right.parent = current.parent;
-        			if (black) {
-        				current.parent.left.clr = color.BLACK;
-        			}
+            		size--;
         		} else {
-            		if (current.parent.right.clr != current.right.clr) {
-            			black = true;
-            		}
-        			current.parent.right = current.right;
-        			current.right.parent = current.parent;
-        			if (black) {
-        				current.parent.right.clr = color.BLACK;
-        			}
+        			root = current.right;
+        			current.right.parent = null;
+        			deleteNode(current);
         		}
         	}
     	}
@@ -283,19 +301,18 @@ public class RedBlackTree<T extends Comparable<T>> {
     public static void main(String[] args) {
     	RedBlackTree<Integer> tree = new RedBlackTree<Integer>();
     	tree.insert(10);
-
 		tree.insert(2);
-
 		tree.insert(16);
+		tree.insert(1);
+    	tree.insert(3);
+    	tree.insert(11);
+    	tree.insert(20);
+    	tree.insert(5);
 
-    	tree.insert(8);
-
-		System.out.println(tree.size);
     	tree.print();
-		System.out.println(tree.size);
         System.out.println();
-        tree.delete(2);
-        tree.print();
+        //tree.delete(2);
+        //tree.print();
     }
 
 }

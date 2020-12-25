@@ -114,10 +114,13 @@ public class GUI extends JFrame {
         btnInsert.setBounds(325, 12, 86, 26);
         treePanel.add(btnInsert);
     	tree.insert(10);
-    	tree.insert(2);
-    	tree.insert(16);
-    	tree.root.left.clr = color.BLACK;
-    	tree.root.right.clr = color.BLACK;
+		tree.insert(2);
+		tree.insert(16);
+		tree.insert(1);
+    	tree.insert(3);
+    	tree.insert(11);
+    	tree.insert(20);
+    	tree.insert(5);
         generateGUI();
         treePanel.repaint();
     }

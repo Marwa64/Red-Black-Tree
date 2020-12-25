@@ -24,9 +24,45 @@ public class RedBlackTree<T extends Comparable<T>> {
 
     public void rotateRight(Node<T> node) {
     	System.out.print("ROTATE " + node.data +" RIGHT \n");
+    	Node<T> temp = node.left;
+    	temp.parent = node.parent;
+    	if (node != root) {
+        	if (node == node.parent.left) {
+        		node.parent.left = temp;
+        	} else {
+        		node.parent.right = temp;
+        	}
+    	}
+    	node.parent = temp;
+    	node.left = temp.right;
+    	if (temp.right != null) {
+    		temp.right.parent = node;
+    	}
+    	temp.right = node;
+    	if (node.parent.parent == null) {
+    		root = node.parent;
+    	}
     }
     public void rotateLeft(Node<T> node) {
     	System.out.print("ROTATE " + node.data + " LEFT \n");
+    	Node<T> temp = node.right;
+    	temp.parent = node.parent;
+    	if (node != root) {
+        	if (node == node.parent.left) {
+        		node.parent.left = temp;
+        	} else {
+        		node.parent.right = temp;
+        	}
+    	}
+    	node.parent = temp;
+    	node.right = temp.left;
+    	if (temp.left != null) {
+    		temp.left.parent = node;
+    	}
+    	temp.left = node;
+    	if (node.parent.parent == null) {
+    		root = node.parent;
+    	}
     }
     public void insert(T data) {
         if(root == null){
@@ -211,6 +247,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             			black = true;
             		}
         			current.parent.left = current.right;
+        			current.right.parent = current.parent;
         			if (black) {
         				current.parent.left.clr = color.BLACK;
         			}
@@ -219,6 +256,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             			black = true;
             		}
         			current.parent.right = current.right;
+        			current.right.parent = current.parent;
         			if (black) {
         				current.parent.right.clr = color.BLACK;
         			}
@@ -252,7 +290,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     	tree.insert(8);
     	tree.print();
         System.out.println();
-        tree.delete(16);
+        tree.delete(2);
         tree.print();
     }
 

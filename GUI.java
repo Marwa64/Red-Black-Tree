@@ -10,13 +10,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.JButton;
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
 
 class nodeGUI {
 	Shape shape;
@@ -178,8 +174,15 @@ public class GUI extends JFrame {
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void run() {
-                new GUI();
+            public void run()
+			{
+				//to enhance frame and buttons shape
+				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				} catch (Exception e) {
+				}
+
+				new GUI();
             }
         });
     }

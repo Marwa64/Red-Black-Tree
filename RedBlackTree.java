@@ -24,45 +24,80 @@ public class RedBlackTree<T extends Comparable<T>> {
 
     public void rotateRight(Node<T> node) {
     	System.out.print("ROTATE " + node.data +" RIGHT \n");
+    	Node<T> temp = node.left;
+    	temp.parent = node.parent;
+    	if (node != root) {
+        	if (node == node.parent.left) {
+        		node.parent.left = temp;
+        	} else {
+        		node.parent.right = temp;
+        	}
+    	}
+    	node.parent = temp;
+    	node.left = temp.right;
+    	if (temp.right != null) {
+    		temp.right.parent = node;
+    	}
+    	temp.right = node;
+    	if (node.parent.parent == null) {
+    		root = node.parent;
+    	}
     }
     public void rotateLeft(Node<T> node) {
     	System.out.print("ROTATE " + node.data + " LEFT \n");
+    	Node<T> temp = node.right;
+    	temp.parent = node.parent;
+    	if (node != root) {
+        	if (node == node.parent.left) {
+        		node.parent.left = temp;
+        	} else {
+        		node.parent.right = temp;
+        	}
+    	}
+    	node.parent = temp;
+    	node.right = temp.left;
+    	if (temp.left != null) {
+    		temp.left.parent = node;
+    	}
+    	temp.left = node;
+    	if (node.parent.parent == null) {
+    		root = node.parent;
+    	}
     }
     public void insert(T data) {
-        if (root == null) {
-            root = new Node<>(data);
-            root.clr = color.BLACK;
+        if(root == null){
+            root=new Node<>(data);
+            root.clr=color.BLACK;
             return;
         }
 
         Node<T> node = new Node<>(data);
-        Node<T> current = this.root;
+        Node<T> current=this.root;
         Node<T> temp = null;
 
-        while (current != null) {
-            temp = current;
+        while (current!=null) {
+            temp=current;
             if (current.data.compareTo(node.data) < 0) {
-                current = current.right;
-            } else {
-                current = current.left;
+                current=current.right;
+            }
+            else {
+                current=current.left;
             }
         }
 
-        node.parent = temp;
+        node.parent=temp;
 
-        if (temp.data.compareTo(node.data) < 0)
-            temp.right = node;
-        else temp.left = node;
+        if(temp.data.compareTo(node.data)<0)
+            temp.right=node;
+        else temp.left=node;
 
-        node.left = node.right = null;
-        node.clr = color.RED;
-        fixInsert(node);
-    }
-    public void fixInsert(Node<T> node){
+        node.left=node.right=null;
+        node.clr=color.RED;
+
+        //fixing violation;
 
         Node<T> nGrandParent , nUncle;
-        while(node!=root && node.parent.clr == color.RED){
-            System.out.println(node.data);
+        while(node.parent.clr == color.RED){
             nGrandParent=node.parent.parent;
             if(node.parent == nGrandParent.left){
                 nUncle= nGrandParent.right;
@@ -71,10 +106,10 @@ public class RedBlackTree<T extends Comparable<T>> {
                     node.parent.clr = color.BLACK;
                     nUncle.clr= color.BLACK;
                     nGrandParent.clr = color.RED;
-                    node=node.parent.parent;
-                    System.out.println(node.data);
+                    node=nGrandParent;
                 }
-                else if(node == node.parent.right){
+                else {
+                    if(node == node.parent.right){
                         node=node.parent;
                         rotateLeft(node);
                     }
@@ -84,7 +119,7 @@ public class RedBlackTree<T extends Comparable<T>> {
                         rotateRight(nGrandParent);
                     }
 
-
+                }
             }
             else {
                 nUncle= nGrandParent.left;
@@ -93,9 +128,10 @@ public class RedBlackTree<T extends Comparable<T>> {
                     node.parent.clr = color.BLACK;
                     nUncle.clr= color.BLACK;
                     nGrandParent.clr = color.RED;
-                    node=node.parent.parent;
+                    node=nGrandParent;
                 }
-                else if(node == node.parent.right){
+                else {
+                    if(node == node.parent.right){
                         node=node.parent;
                         rotateRight(node);
                     }
@@ -105,7 +141,7 @@ public class RedBlackTree<T extends Comparable<T>> {
                         rotateLeft(nGrandParent);
                     }
 
-
+                }
 
             }
 
@@ -211,6 +247,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             			black = true;
             		}
         			current.parent.left = current.right;
+        			current.right.parent = current.parent;
         			if (black) {
         				current.parent.left.clr = color.BLACK;
         			}
@@ -219,6 +256,7 @@ public class RedBlackTree<T extends Comparable<T>> {
             			black = true;
             		}
         			current.parent.right = current.right;
+        			current.right.parent = current.parent;
         			if (black) {
         				current.parent.right.clr = color.BLACK;
         			}
@@ -247,9 +285,13 @@ public class RedBlackTree<T extends Comparable<T>> {
     	tree.insert(10);
     	tree.insert(2);
     	tree.insert(16);
-    	tree.insert(5);
-    	tree.insert(12);
+    	tree.root.left.clr = color.BLACK;
+    	tree.root.right.clr = color.BLACK;
+    	tree.insert(8);
     	tree.print();
+        System.out.println();
+        tree.delete(2);
+        tree.print();
     }
 
 }

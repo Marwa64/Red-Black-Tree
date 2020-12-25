@@ -69,6 +69,7 @@ public class RedBlackTree<T extends Comparable<T>> {
         if (root == null) {
             root = new Node<>(data);
             root.clr = color.BLACK;
+            size++;
             return;
         }
 
@@ -93,8 +94,10 @@ public class RedBlackTree<T extends Comparable<T>> {
 
         node.left = node.right = null;
         node.clr = color.RED;
-        fixInsert(node);
-    }
+		size++;
+		fixInsert(node);
+
+	}
     public void fixInsert(Node<T> node){
 
         Node<T> nGrandParent , nUncle;
@@ -146,7 +149,6 @@ public class RedBlackTree<T extends Comparable<T>> {
 
         }
         root.clr = color.BLACK;
-        size++;
     }
     public Node<T> search(T data) {
     	Node<T> current = root;
@@ -281,10 +283,16 @@ public class RedBlackTree<T extends Comparable<T>> {
     public static void main(String[] args) {
     	RedBlackTree<Integer> tree = new RedBlackTree<Integer>();
     	tree.insert(10);
-    	tree.insert(2);
-    	tree.insert(16);
+
+		tree.insert(2);
+
+		tree.insert(16);
+
     	tree.insert(8);
+
+		System.out.println(tree.size);
     	tree.print();
+		System.out.println(tree.size);
         System.out.println();
         tree.delete(2);
         tree.print();

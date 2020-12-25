@@ -1,5 +1,3 @@
-import javax.swing.plaf.IconUIResource;
-import java.awt.*;
 
 enum color{RED,BLACK};
 

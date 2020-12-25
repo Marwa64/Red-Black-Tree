@@ -13,6 +13,10 @@ import java.util.Queue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 class nodeGUI {
 	Shape shape;
@@ -26,7 +30,7 @@ class nodeGUI {
 		this.node = node;
 		this.x = x;
 		this.y = y;
-		this.shape = new Ellipse2D.Double(x, y, 65, 65);
+		this.shape = new Ellipse2D.Double(x, y, 60, 60);
 		this.color = color;
 		this.font = new Font("TimesRoman", Font.PLAIN, 26);
 		this.stroke = new BasicStroke(3);
@@ -38,7 +42,7 @@ class nodeGUI {
 	      g2.setStroke(stroke);
 	      g2.draw(shape);
           g2.setFont(font); 
-          g2.drawString("" + node.data, x + 23, y + 40);
+          g2.drawString("" + node.data, x + 20, y + 37);
    }
 }
 
@@ -48,47 +52,85 @@ public class GUI extends JFrame {
     
     static Color black = new Color(0,0,0);
     static Color red = new Color(255,17,0);
-    static int initX = 380, initY = 100;
+    static int initX = 560, initY = 140;
+    static JPanel treePanel;
     
     static RedBlackTree<Integer> tree;
     static ArrayList<nodeGUI> allNodes;
-    
-    @SuppressWarnings("serial")
+    private JTextField deleteField;
+    private JTextField insertField;
+   
 	public GUI() {
 
-        setSize(new Dimension(900, 700));
+        setSize(new Dimension(1200, 700));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setTitle("Red Black Tree");
         
         allNodes = new ArrayList<nodeGUI>();
     	tree = new RedBlackTree<Integer>();
-    	tree.insert(10);
-    	tree.insert(2);
-    	tree.insert(16);
-    	tree.root.left.clr = color.BLACK;
-    	tree.root.right.clr = color.BLACK;
-    	tree.insert(8);
-    	tree.insert(14);
-    	tree.insert(9);
     	
-        generateGUI();
-        JPanel treePanel = new JPanel() {
-            @Override
+        treePanel = new JPanel() {
+			private static final long serialVersionUID = 1L;
+			@Override
             public void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
+                super.paintComponent(g2);
                 for (nodeGUI node: allNodes) {
                 	node.draw(g2);
                 }
             }
         };
         getContentPane().add(treePanel);
+        
+        JButton btnDelete = new JButton("Delete");
+        btnDelete.setBounds(540, 12, 86, 26);
+        btnDelete.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		tree.delete(Integer.parseInt(deleteField.getText()));
+                generateGUI();
+                treePanel.repaint();
+                deleteField.setText("");
+        	}
+        });
+        treePanel.setLayout(null);
+        
+        deleteField = new JTextField();
+        deleteField.setBounds(461, 11, 69, 29);
+        treePanel.add(deleteField);
+        deleteField.setColumns(10);
+        treePanel.add(btnDelete);
+        
+        insertField = new JTextField();
+        insertField.setColumns(10);
+        insertField.setBounds(246, 11, 69, 29);
+        treePanel.add(insertField);
+        
+        JButton btnInsert = new JButton("Insert");
+        btnInsert.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		tree.insert(Integer.parseInt(insertField.getText()));
+                generateGUI();
+                treePanel.repaint();
+                insertField.setText("");
+        	}
+        });
+        btnInsert.setBounds(325, 12, 86, 26);
+        treePanel.add(btnInsert);
+    	tree.insert(10);
+    	tree.insert(2);
+    	tree.insert(16);
+    	tree.root.left.clr = color.BLACK;
+    	tree.root.right.clr = color.BLACK;
+        generateGUI();
+        treePanel.repaint();
     }
     
     public void generateGUI() {
 	    if (tree.root == null) {
 	    	return; 
 	    }
+	    allNodes.clear();
 	    Queue<Node<Integer>> q = new LinkedList<Node<Integer>>(); 
 	    Node<Integer> current; 
 	    nodeGUI newNode = null;
@@ -99,7 +141,7 @@ public class GUI extends JFrame {
 	      q.poll(); 
 	      System.out.print(current.data + " ");
 	      if (current == tree.root) {
-	    	  newNode = new nodeGUI(current, initX + 30, initY + 40, black, 0);
+	    	  newNode = new nodeGUI(current, initX, initY, black, 0);
 	      } else {
 	    	  for (nodeGUI node: allNodes) {
 	    		  if (node.node == current.parent) {
@@ -107,16 +149,16 @@ public class GUI extends JFrame {
 	    			  // If the node is red
 	    		      if (current.clr == color.BLACK) {
 	    		    	  if (current == current.parent.left) {
-	    		    		  newNode = new nodeGUI(current, node.x - ((40 + 30*tree.size) - (40*level)), node.y + 80, black, level);
+	    		    		  newNode = new nodeGUI(current, node.x - (20 * (10-level)), node.y + 80, black, level);
 	    		    	  }  else {
-	    		    		  newNode = new nodeGUI(current, node.x + ((40 + 30*tree.size) - (40*level)), node.y + 80, black, level);
+	    		    		  newNode = new nodeGUI(current, node.x + (20 * (10-level)), node.y + 80, black, level);
 	    		    	  }
 	    		    // If the node is red
 	    		      } else {
 	    		    	  if (current == current.parent.left) {
-	    		    		  newNode = new nodeGUI(current, node.x - ((40 + 30*tree.size) - (40*level)), node.y + 80, red, level);
+	    		    		  newNode = new nodeGUI(current, node.x - (20 * (10-level)), node.y + 80, red, level);
 	    		    	  } else {
-	    		    		  newNode = new nodeGUI(current, node.x + ((40 + 30*tree.size) - (40*level)), node.y + 80, red, level);
+	    		    		  newNode = new nodeGUI(current, node.x + (20 * (10-level)), node.y + 80, red, level);
 	    		    	  }
 	    		      }
 	    			  break;
@@ -131,10 +173,10 @@ public class GUI extends JFrame {
 	        q.add(current.right); 
 	    } 
     }
+    
     public static void main(String arg[]) {
 
         SwingUtilities.invokeLater(new Runnable() {
-
             @Override
             public void run() {
                 new GUI();

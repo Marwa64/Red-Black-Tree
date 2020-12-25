@@ -101,7 +101,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     public void fixInsert(Node<T> node){
 
         Node<T> nGrandParent , nUncle;
-        while(node!=root && node.parent.clr == color.RED){
+        while( node !=null && node!=root && node.parent.clr == color.RED){
             nGrandParent=node.parent.parent;
             if(node.parent == nGrandParent.left){
                 nUncle= nGrandParent.right;
@@ -119,7 +119,7 @@ public class RedBlackTree<T extends Comparable<T>> {
                 else {
                     node.parent.clr = color.BLACK;
                     nGrandParent.clr = color.RED;
-                    rotateRight(nGrandParent);
+                    rotateRight(node.parent.parent);
                 }
 
 
@@ -134,13 +134,13 @@ public class RedBlackTree<T extends Comparable<T>> {
                     node=node.parent.parent;
                 }
                 else if(node == node.parent.right){
-                    node=node.parent;
-                    rotateRight(node);
+					node.parent.clr = color.BLACK;
+					nGrandParent.clr = color.RED;
+                    rotateLeft(node.parent.parent);
                 }
                 else {
-                    node.parent.clr = color.BLACK;
-                    nGrandParent.clr = color.RED;
-                    rotateLeft(nGrandParent);
+					node=node.parent;
+                    rotateRight(node);
                 }
 
 
@@ -282,20 +282,15 @@ public class RedBlackTree<T extends Comparable<T>> {
 
     public static void main(String[] args) {
     	RedBlackTree<Integer> tree = new RedBlackTree<Integer>();
-    	tree.insert(10);
+    	tree.insert(2);
+    	tree.insert(3);
+		tree.insert(4);
+		tree.print();
 
-		tree.insert(2);
 
-		tree.insert(16);
 
-    	tree.insert(8);
 
-		System.out.println(tree.size);
-    	tree.print();
-		System.out.println(tree.size);
-        System.out.println();
-        tree.delete(2);
-        tree.print();
+
     }
 
 }

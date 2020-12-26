@@ -196,7 +196,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     	}
     	blackRedLine(child, sibling, left);
     }
-    private void doubleBlack(Node<T> parent, Node<T> sibling, boolean left) {
+    private void doubleBlack(Node<T> node, Node<T> sibling, boolean left) {
     	System.out.print("\nDOUBLE BLACK ON " + sibling.data + "'S SIBLING \n");
 		// If the sibling is black
 		if (sibling.clr == color.BLACK) {
@@ -228,12 +228,31 @@ public class RedBlackTree<T extends Comparable<T>> {
 		} else {
 			// re-color sibling and parent
 			sibling.clr = color.BLACK;
-			if (parent.parent.clr == color.BLACK) {
-				parent.parent.clr = color.RED;
+			if (node.parent.clr == color.BLACK) {
+				node.parent.clr = color.RED;
 			} else {
-				parent.parent.clr = color.BLACK;
+				node.parent.clr = color.BLACK;
 			}
-			rotateLeft(parent.parent);
+			if (left) {
+				rotateLeft(node.parent);
+			} else {
+				rotateRight(node.parent);
+			}
+			if (left) {
+				if (node.parent.right.clr == color.BLACK) {
+         			if (node.parent.clr == color.RED) {
+        				node.parent.clr = color.BLACK;
+          			}
+					doubleBlack(node, node.parent.right, left);
+				}
+			} else {
+				if (node.parent.left.clr == color.BLACK) {
+         			if (node.parent.clr == color.RED) {
+        				node.parent.clr = color.BLACK;
+          			}
+					doubleBlack(node,node.parent.left, left);
+				}
+			}
 		}
     }
     public void delete(T data) {

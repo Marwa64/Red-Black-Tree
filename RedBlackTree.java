@@ -5,11 +5,13 @@ class Node<T extends  Comparable<T> >{
     T data;
     Node<T> left , right , parent;
     color clr;
-
+    boolean doubleBlack;
+    
     Node(T data){
         this.data=data;
         this.clr= color.RED;
         parent = right = left = null;
+        doubleBlack = false;
     }
 }
 
@@ -176,6 +178,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     private void blackRedLine(Node<T> sibling, Node<T> child, boolean left) {
 		// re-color sibiling's child
 		child.clr = color.BLACK;
+		sibling.clr = color.RED;
 		if (left) {
 			rotateRight(sibling.parent);
 		} else {
@@ -193,7 +196,8 @@ public class RedBlackTree<T extends Comparable<T>> {
     	}
     	blackRedLine(child, sibling, left);
     }
-    private void doubleBlack(Node<T> node, Node<T> sibling, boolean left) {
+    private void doubleBlack(Node<T> parent, Node<T> sibling, boolean left) {
+    	System.out.print("\nDOUBLE BLACK ON " + sibling.data + "'S SIBLING \n");
 		// If the sibling is black
 		if (sibling.clr == color.BLACK) {
 			// If the sibling's right child is red (Case 3.2 a iii)
@@ -211,9 +215,9 @@ public class RedBlackTree<T extends Comparable<T>> {
 				if (sibling.left.clr == color.RED) {
 					// if sibling is right
 					if (left) {
-						blackRedTriangle(sibling, sibling.right.left, !left);
+						blackRedTriangle(sibling, sibling.left, !left);
 					} else {
-						blackRedLine(sibling, sibling.right, !left);
+						blackRedLine(sibling, sibling.left, !left);
 					}
 				}
 			// If the sibling's children and black or null (Case 3.2 b)
@@ -224,124 +228,66 @@ public class RedBlackTree<T extends Comparable<T>> {
 		} else {
 			// re-color sibling and parent
 			sibling.clr = color.BLACK;
-			if (node.parent.clr == color.BLACK) {
-				node.parent.clr = color.RED;
+			if (parent.parent.clr == color.BLACK) {
+				parent.parent.clr = color.RED;
 			} else {
-				node.parent.clr = color.BLACK;
+				parent.parent.clr = color.BLACK;
 			}
-			rotateLeft(node.parent);
+			rotateLeft(parent.parent);
 		}
     }
     public void delete(T data) {
     	Node<T> current = search(data);
-    	// If this is the only node
-    	if (current == root && size == 1) {
-    		root = null;
-    		size--;
-    		return;
-    	}
     	if (current != null) {
-    		// If this is a leaf
-        	if (current.right == null && current.left == null && current != root) {
-        		// Case 1
-        		if (current.clr != current.parent.clr) {
-        			current.parent.clr = color.BLACK;
-        		} else {
-        			// Case 3
-        			if (current.clr == color.BLACK && current.parent.clr == color.BLACK) {
-        				// If this node is the left child
-        				if (current == current.parent.left) {
-        					doubleBlack(current, current.parent.right, true);
-        				} 
-        				// If this node is the right child
-        				else {
-        					doubleBlack(current, current.parent.left, false);
-        				}
-        			}
-        		}
-        		deleteNode(current);
+        	// If this is the only node
+        	if (current == root && size == 1) {
+        		root = null;
+        		size--;
+        		return;
         	}
-        	// Not leaf
-        	else if (current.left != null) {
-        		Node<T> temp = current.left;
-        		// If the left node has right children
-        		if (temp.right != null) {
+        	Node<T> swapNode = current;
+        	// If the node we want to delete has a left child
+    		if (current.left != null) {
+           		swapNode = current.left;
+        		// If the left child has right children
+        		if (swapNode.right != null) {
             		while (true) {
-            			if (temp.right != null) {
-            				temp = temp.right;
+            			if (swapNode.right != null) {
+            				swapNode = swapNode.right;
             			} else {
             				break;
             			}
             		}
-            		current.data = temp.data;
-            		if (temp.clr != current.clr) {
-            			current.clr = color.BLACK;
-            		}
-            		deleteNode(temp);
-            	// The left node doesn't have right children so we're going to swap the current with the left node directly
-        		} else {
-        			if (current == root) {
-        				temp.parent = null;
-        				temp.right = current.right;
-        				current.right.parent = temp;
-        				temp.clr = color.BLACK;
-        				root = temp;
-        				return;
-        			} else {
-            			temp.parent = current.parent;
-            			temp.clr = current.clr;
-                		if (current == current.parent.left) {
-                			current.parent.left = temp;
-                		} else {
-                			current.parent.right = temp;
-                		}
-                		temp.right = current.right;
-                		current.right.parent = temp;
-                  		if (temp.clr != current.clr) {
-                  			if (temp.left != null) {
-                  				temp.left.clr = color.BLACK;
-                  			} else {
-                  				temp.clr = color.BLACK;
-                  			}
-                		} else if(temp.parent.right != null) {
-                			System.out.println("I'M HERE");
-                			if(temp.clr == color.RED && temp.parent.right.clr == color.BLACK) {
-                				temp.clr = color.BLACK;
-                			} else if(temp.clr == color.BLACK && temp.parent.right.clr == color.BLACK) {
-                				doubleBlack(temp, temp.parent.right, true);
-                			}
-                		}
-        			}
         		}
-        	} else if (current.right != null) {
-        		if (current != root) {
-               		boolean black = false;
-            		if (current == current.parent.left) {
-                		if (current.clr != current.right.clr) {
-                			black = true;
-                		}
-            			current.parent.left = current.right;
-            			current.right.parent = current.parent;
-            			if (black) {
-            				current.parent.left.clr = color.BLACK;
-            			}
-            		} else {
-                		if (current.parent.right.clr != current.right.clr) {
-                			black = true;
-                		}
-            			current.parent.right = current.right;
-            			current.right.parent = current.parent;
-            			if (black) {
-            				current.parent.right.clr = color.BLACK;
-            			}
-            		}
-            		size--;
-        		} else {
-        			root = current.right;
-        			current.right.parent = null;
-        			deleteNode(current);
-        		}
+        		current.data = swapNode.data;
+ 
+        	// If the node we want to delete has a right child
+    		} else if (current.right != null) {
+    			swapNode = current.right;
+    			current.data = swapNode.data;
         	}
+    		// Deleting the swapNode
+			if (swapNode.clr == color.BLACK) {
+           		if (swapNode.left == null || swapNode.left.clr == color.BLACK) {
+          			if (swapNode.parent.clr == color.RED) {
+        				swapNode.parent.clr = color.BLACK;
+        				
+          			}
+    				// If this node is the left child
+    				if (swapNode == swapNode.parent.left) {
+    					doubleBlack(swapNode, swapNode.parent.right, true);
+    				} 
+    				// If this node is the right child
+    				else {
+    					doubleBlack(swapNode, swapNode.parent.left, false);
+    				}
+        		} else {
+          			if (swapNode.parent.clr == color.RED) {
+        				swapNode.parent.clr = color.BLACK;
+          			}
+        		}
+			}
+    		deleteNode(swapNode);
     	}
     	
     }

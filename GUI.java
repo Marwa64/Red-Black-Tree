@@ -83,10 +83,12 @@ public class GUI extends JFrame {
         btnDelete.setBounds(540, 12, 86, 26);
         btnDelete.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		tree.delete(Integer.parseInt(deleteField.getText()));
-                generateGUI();
-                treePanel.repaint();
-                deleteField.setText("");
+        		if (!deleteField.getText().equalsIgnoreCase("")) {
+            		tree.delete(Integer.parseInt(deleteField.getText()));
+                    generateGUI();
+                    treePanel.repaint();
+                    deleteField.setText("");
+        		}
         	}
         });
         treePanel.setLayout(null);
@@ -105,14 +107,20 @@ public class GUI extends JFrame {
         JButton btnInsert = new JButton("Insert");
         btnInsert.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		tree.insert(Integer.parseInt(insertField.getText()));
-                generateGUI();
-                treePanel.repaint();
-                insertField.setText("");
+        		if (!insertField.getText().equalsIgnoreCase("")) {
+            		tree.insert(Integer.parseInt(insertField.getText()));
+                    generateGUI();
+                    treePanel.repaint();
+                    insertField.setText("");
+        		}
         	}
         });
         btnInsert.setBounds(325, 12, 86, 26);
         treePanel.add(btnInsert);
+    	/*tree.insert(30);
+		tree.insert(20);
+		tree.insert(40);*/
+        
     	tree.insert(10);
 		tree.insert(2);
 		tree.insert(16);
@@ -138,7 +146,7 @@ public class GUI extends JFrame {
 	    while (!q.isEmpty()) { 
 	      current = q.peek(); 
 	      q.poll(); 
-	      System.out.print(current.data + " ");
+	      //System.out.print(current.data + " ");
 	      if (current == tree.root) {
 	    	  newNode = new nodeGUI(current, initX, initY, black, 0);
 	      } else {

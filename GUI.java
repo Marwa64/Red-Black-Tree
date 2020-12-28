@@ -105,7 +105,10 @@ public class GUI extends JFrame {
             }
         };
         getContentPane().add(treePanel);
-        
+
+
+
+
         JButton btnDelete = new JButton("Delete");
         btnDelete.setBounds(540, 12, 86, 26);
         btnDelete.addActionListener(new ActionListener() {
@@ -131,8 +134,12 @@ public class GUI extends JFrame {
         insertField.setColumns(10);
         insertField.setBounds(246, 11, 69, 29);
         treePanel.add(insertField);
-        
-        JButton btnInsert = new JButton("Insert");
+
+
+
+
+
+		JButton btnInsert = new JButton("Insert");
         btnInsert.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		if (!insertField.getText().equalsIgnoreCase("")) {
@@ -145,8 +152,28 @@ public class GUI extends JFrame {
         });
         btnInsert.setBounds(325, 12, 86, 26);
         treePanel.add(btnInsert);
-        
-        JButton btnClear = new JButton("Clear");
+
+
+		insertField.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				btnInsert.doClick();
+			}
+		});
+
+
+
+		deleteField.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				btnDelete.doClick();
+			}
+		});
+
+
+		JButton btnClear = new JButton("Clear");
         btnClear.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		tree.clear(tree.root);

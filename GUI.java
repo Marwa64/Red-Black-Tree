@@ -118,6 +118,9 @@ public class GUI extends JFrame {
                     generateGUI();
                     treePanel.repaint();
                     deleteField.setText("");
+					deleteField.requestFocus();
+
+
         		}
         	}
         });
@@ -146,7 +149,9 @@ public class GUI extends JFrame {
             		tree.insert(Integer.parseInt(insertField.getText()));
                     generateGUI();
                     treePanel.repaint();
-                    insertField.setText("");
+					insertField.setText("");
+					insertField.requestFocus();
+
         		}
         	}
         });

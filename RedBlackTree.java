@@ -352,7 +352,6 @@ public class RedBlackTree<T extends Comparable<T>> {
     	tree.delete(10);
 		tree.delete(2);
 		tree.delete(16);
-        //tree.delete(2);
         tree.print();
     }
 

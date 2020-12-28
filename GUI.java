@@ -4,8 +4,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -15,30 +17,53 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 class nodeGUI {
-	Shape shape;
+	Shape circle;
 	Color color;
 	Font font;
 	BasicStroke stroke;
 	int x, y, level;
 	Node<Integer> node;
+	Line2D line1;
+	Line2D line2;
 	
 	public nodeGUI(Node<Integer> node, int x, int y, Color color, int level){
 		this.node = node;
 		this.x = x;
 		this.y = y;
-		this.shape = new Ellipse2D.Double(x, y, 60, 60);
+		this.circle = new Ellipse2D.Double(x, y, 41, 41);
 		this.color = color;
-		this.font = new Font("TimesRoman", Font.PLAIN, 26);
+		this.font = new Font("TimesRoman", Font.PLAIN, 23);
 		this.stroke = new BasicStroke(3);
 		this.level = level;
+		this.line1 = new Line2D.Float(0, 0, 0, 0);
+		this.line2 = new Line2D.Float(0, 0, 0, 0);
 	}
 	
-   public void draw(Graphics2D g2) {
+   public void draw(Graphics2D g2, ArrayList<nodeGUI> allNodes) {
 	      g2.setColor(color);
+	      g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	      g2.setStroke(stroke);
-	      g2.draw(shape);
+	      g2.draw(circle);
           g2.setFont(font); 
-          g2.drawString("" + node.data, x + 20, y + 37);
+          g2.drawString("" + node.data, x + 12, y + 28);
+          g2.setColor(Color.BLACK);
+          if (node.left != null || node.right != null) {
+              for (nodeGUI current: allNodes) {
+                	if (node.left != null) {
+                		if (current.node == node.left) {
+                			this.line1 = new Line2D.Float(this.x+20, this.y+42, current.x + 20, current.y);
+                			continue;
+                		}
+                	}
+                	if (node.right != null) {
+                		if (current.node == node.right) {
+                			this.line2 = new Line2D.Float(this.x+20, this.y+42, current.x + 20, current.y);
+                		}
+                	}
+                }
+          }
+          g2.draw(line1);
+          g2.draw(line2);
    }
 }
 
@@ -73,7 +98,7 @@ public class GUI extends JFrame {
                 Graphics2D g2 = (Graphics2D) g;
                 super.paintComponent(g2);
                 for (nodeGUI node: allNodes) {
-                	node.draw(g2);
+                	node.draw(g2, allNodes);
                 }
             }
         };
@@ -156,16 +181,36 @@ public class GUI extends JFrame {
 	    			  // If the node is red
 	    		      if (current.clr == color.BLACK) {
 	    		    	  if (current == current.parent.left) {
-	    		    		  newNode = new nodeGUI(current, node.x - (20 * (10-level)), node.y + 80, black, level);
+	    		    		  if (level == 1) {
+	    		    			  newNode = new nodeGUI(current, node.x - 300, node.y + 90, black, level);
+	    		    		  } else {
+	    		    			  newNode = new nodeGUI(current, node.x - (260 - (60*level)), node.y + 80, black, level);
+	    		    		  }
+	    		    		  
 	    		    	  }  else {
-	    		    		  newNode = new nodeGUI(current, node.x + (20 * (10-level)), node.y + 80, black, level);
+	    		    		  if (level == 1) {
+	    		    			  newNode = new nodeGUI(current, node.x + 300, node.y + 90, black, level);
+	    		    		  } else {
+	    		    			  newNode = new nodeGUI(current, node.x + (260 - (60*level)), node.y + 80, black, level);
+	    		    		  }
+	    		    		  
 	    		    	  }
 	    		    // If the node is red
 	    		      } else {
 	    		    	  if (current == current.parent.left) {
-	    		    		  newNode = new nodeGUI(current, node.x - (20 * (10-level)), node.y + 80, red, level);
+	    		    		  if (level == 1) {
+	    		    			  newNode = new nodeGUI(current, node.x - 300, node.y + 90, red, level);
+	    		    		  } else {
+	    		    			  newNode = new nodeGUI(current, node.x - (260 - (60*level)), node.y + 80, red, level);
+	    		    		  }
+	    		    		  
 	    		    	  } else {
-	    		    		  newNode = new nodeGUI(current, node.x + (20 * (10-level)), node.y + 80, red, level);
+	    		    		  if (level == 1) {
+	    		    			  newNode = new nodeGUI(current, node.x + 300, node.y + 90, red, level);
+	    		    		  } else {
+	    		    			  newNode = new nodeGUI(current, node.x + (260 - (60*level)), node.y + 80, red, level);
+	    		    		  }
+	    		    		  
 	    		    	  }
 	    		      }
 	    			  break;

@@ -73,6 +73,7 @@ public class GUI extends JFrame {
     
     static Color black = new Color(0,0,0);
     static Color red = new Color(255,17,0);
+    static Color background = new Color(176,222,255);
     static int initX = 560, initY = 140;
     static JPanel treePanel;
     
@@ -84,6 +85,7 @@ public class GUI extends JFrame {
 	public GUI() {
 
         setSize(new Dimension(1200, 700));
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setTitle("Red Black Tree");
@@ -117,6 +119,7 @@ public class GUI extends JFrame {
         	}
         });
         treePanel.setLayout(null);
+        treePanel.setBackground(background);
         
         deleteField = new JTextField();
         deleteField.setBounds(461, 11, 69, 29);
@@ -142,18 +145,29 @@ public class GUI extends JFrame {
         });
         btnInsert.setBounds(325, 12, 86, 26);
         treePanel.add(btnInsert);
+        
+        JButton btnClear = new JButton("Clear");
+        btnClear.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		tree.clear();
+                generateGUI();
+                treePanel.repaint();
+        	}
+        });
+        btnClear.setBounds(850, 12, 86, 26);
+        treePanel.add(btnClear);
     	/*tree.insert(30);
 		tree.insert(20);
 		tree.insert(40);*/
         
-    	/*tree.insert(10);
-		tree.insert(2);
-		tree.insert(16);
-		tree.insert(1);
+    	tree.insert(15);
+		tree.insert(8);
+		tree.insert(30);
+		tree.insert(5);
+    	tree.insert(10);
+    	tree.insert(21);
+    	tree.insert(50);
     	tree.insert(3);
-    	tree.insert(11);
-    	tree.insert(20);
-    	tree.insert(5);*/
         generateGUI();
         treePanel.repaint();
     }

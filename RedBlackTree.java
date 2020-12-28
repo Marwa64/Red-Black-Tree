@@ -169,11 +169,17 @@ public class RedBlackTree<T extends Comparable<T>> {
     	size--;
     	if (node.parent != null) {
     		if (node == node.parent.left) {
-    			node.parent.left = null;
+    			if (node.left != null)
+    				node.left.parent = node.parent;
+    			node.parent.left = node.left;
+    			
     		} else {
-    			node.parent.right = null;
+    			if (node.right != null)
+    				node.right.parent = node.parent;
+    			node.parent.right = node.right;
     		}
     	}
+    	node = null;
     }
     private void blackRedLine(Node<T> sibling, Node<T> child, boolean left) {
 		// re-color sibiling's child
@@ -267,6 +273,7 @@ public class RedBlackTree<T extends Comparable<T>> {
         	Node<T> swapNode = current;
         	// If the node we want to delete has a left child
     		if (current.left != null) {
+    			//System.out.println("SWAPNODE: " + swapNode.data + " SWAPNODE PARENT: " + swapNode.parent.data);
            		swapNode = current.left;
         		// If the left child has right children
         		if (swapNode.right != null) {
@@ -301,7 +308,10 @@ public class RedBlackTree<T extends Comparable<T>> {
     					doubleBlack(swapNode, swapNode.parent.left, false);
     				}
         		} else {
-          			if (swapNode.parent.clr == color.RED) {
+        			if (swapNode == current.left && swapNode.left != null) {
+        				swapNode.left.clr = color.BLACK;
+        			}
+        			else if (swapNode.parent.clr == color.RED) {
         				swapNode.parent.clr = color.BLACK;
           			}
         		}
@@ -335,8 +345,8 @@ public class RedBlackTree<T extends Comparable<T>> {
     	tree.print();
         System.out.println();
     	tree.delete(10);
-		//tree.delete(2);
-		//tree.delete(16);
+		tree.delete(2);
+		tree.delete(16);
         //tree.delete(2);
         tree.print();
     }

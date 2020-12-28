@@ -206,29 +206,43 @@ public class RedBlackTree<T extends Comparable<T>> {
     	//System.out.print("\nDOUBLE BLACK ON " + sibling.data + "'S SIBLING \n");
 		// If the sibling is black
 		if (sibling.clr == color.BLACK) {
-			// If the sibling's right child is red (Case 3.2 a iii)
-			if (sibling.right != null) {
-				if (sibling.right.clr == color.RED) {
-					// if sibling is right
-					if (left) {
+			if (sibling.right != null && sibling.left != null) {
+				// if sibling is right
+				if (left) {
+					if (sibling.right.clr == color.RED) {
 						blackRedLine(sibling, sibling.right, !left);
-					} else {
-						blackRedTriangle(sibling, sibling.right, !left);
 					}
-				}
-			// If the sibling's left child is red (Case 3.2 a iv)
-			} else if (sibling.left != null) {
-				if (sibling.left.clr == color.RED) {
-					// if sibling is right
-					if (left) {
-						blackRedTriangle(sibling, sibling.left, !left);
-					} else {
+				// If sibling is left
+				} else {
+					if (sibling.left.clr == color.RED) {
 						blackRedLine(sibling, sibling.left, !left);
 					}
 				}
-			// If the sibling's children and black or null (Case 3.2 b)
 			} else {
-				sibling.clr = color.RED;
+				// If the sibling's right child is red (Case 3.2 a iii)
+				if (sibling.right != null) {
+					if (sibling.right.clr == color.RED) {
+						// if sibling is right
+						if (left) {
+							blackRedLine(sibling, sibling.right, !left);
+						} else {
+							blackRedTriangle(sibling, sibling.right, !left);
+						}
+					}
+				// If the sibling's left child is red (Case 3.2 a iv)
+				} else if (sibling.left != null) {
+					if (sibling.left.clr == color.RED) {
+						// if sibling is right
+						if (left) {
+							blackRedTriangle(sibling, sibling.left, !left);
+						} else {
+							blackRedLine(sibling, sibling.left, !left);
+						}
+					}
+				// If the sibling's children and black or null (Case 3.2 b)
+				} else {
+					sibling.clr = color.RED;
+				}
 			}
 		// If the sibling is red (Case 3.2 c iii)
 		} else {

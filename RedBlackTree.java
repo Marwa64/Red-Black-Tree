@@ -25,7 +25,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     }
 
     public void rotateRight(Node<T> node) {
-    	System.out.print("ROTATE " + node.data +" RIGHT \n");
+    	//System.out.print("ROTATE " + node.data +" RIGHT \n");
     	Node<T> temp = node.left;
     	temp.parent = node.parent;
     	if (node != root) {
@@ -46,7 +46,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     	}
     }
     public void rotateLeft(Node<T> node) {
-    	System.out.print("ROTATE " + node.data + " LEFT \n");
+    	//System.out.print("ROTATE " + node.data + " LEFT \n");
     	Node<T> temp = node.right;
     	temp.parent = node.parent;
     	if (node != root) {
@@ -203,7 +203,7 @@ public class RedBlackTree<T extends Comparable<T>> {
     	blackRedLine(child, sibling, left);
     }
     private void doubleBlack(Node<T> node, Node<T> sibling, boolean left) {
-    	System.out.print("\nDOUBLE BLACK ON " + sibling.data + "'S SIBLING \n");
+    	//System.out.print("\nDOUBLE BLACK ON " + sibling.data + "'S SIBLING \n");
 		// If the sibling is black
 		if (sibling.clr == color.BLACK) {
 			// If the sibling's right child is red (Case 3.2 a iii)
@@ -320,8 +320,13 @@ public class RedBlackTree<T extends Comparable<T>> {
     	}
     	
     }
-    public void clear() {
-    	
+    public void clear(Node<T> node) {
+        if (node == null) return;  
+        
+        clear(node.left);  
+        clear(node.right);  
+          
+        deleteNode(node); 
     }
     public void printInorder (Node<T> root, String path) {
         if(root == null)return;

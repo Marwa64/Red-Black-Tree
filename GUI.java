@@ -149,7 +149,7 @@ public class GUI extends JFrame {
         JButton btnClear = new JButton("Clear");
         btnClear.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		tree.clear();
+        		tree.clear(tree.root);
                 generateGUI();
                 treePanel.repaint();
         	}
@@ -160,14 +160,14 @@ public class GUI extends JFrame {
 		tree.insert(20);
 		tree.insert(40);*/
         
-    	tree.insert(15);
+    	/*tree.insert(15);
 		tree.insert(8);
 		tree.insert(30);
 		tree.insert(5);
     	tree.insert(10);
     	tree.insert(21);
     	tree.insert(50);
-    	tree.insert(3);
+    	tree.insert(3);*/
         generateGUI();
         treePanel.repaint();
     }

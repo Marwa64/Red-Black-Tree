@@ -177,6 +177,7 @@ public class GUI extends JFrame {
         btnClear.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		tree.clear(tree.root);
+        		tree.root = null;
                 generateGUI();
                 treePanel.repaint();
         	}
@@ -201,6 +202,7 @@ public class GUI extends JFrame {
     
     public void generateGUI() {
 	    if (tree.root == null) {
+	    	allNodes.clear();
 	    	return; 
 	    }
 	    allNodes.clear();
